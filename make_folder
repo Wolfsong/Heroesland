@@ -1,0 +1,75 @@
+#!/bin/bash
+
+VAR_MIN_COUNT=1
+
+if [ $# -lt $VAR_MIN_COUNT ]
+then
+	echo "
+Должно быть указан как минимум один параметр - Название квеста!
+Синтаксис команды следующий:
+	./make_folder *имя квеста (папки)* [*номер фракции*] [*номер части квеста*]
+	Если отсутствует параметр *немер части квеста*, то квест понимается, как одночастный.
+	Если номер фракйии не указан, то считается, что квест межфракционный.
+	Номера фракций:
+	1 - добро
+	2 - зло
+	3 - нейтралы
+	0 - межфракционные"
+	exit 1
+fi
+
+if [ $# -ge 2 ]
+then
+	if [ $2 -eq 1 ]
+	then
+		VAR_FRACTION_FOLDER="Good"
+	fi
+	if [ $2 -eq 2 ]
+	then
+		VAR_FRACTION_FOLDER="Bad"
+	fi
+	if [ $2 -eq 3 ]
+	then
+		VAR_FRACTION_FOLDER="Neutral"
+	fi
+fi
+
+VAR_FRACTION_NUM=0
+VAR_FRACTION_FOLDER="General"
+
+VAR_QUEST_NUM=`cat NUMBERS.txt`
+VAR_QUEST_PART=0
+
+if [ $# -eq 3 ]
+then
+	VAR_QUEST_PART=$3
+fi
+
+echo $VAR_QUEST_NUM
+echo $VAR_QUEST_PART
+VAR_FOLDER_NAME=$1
+if [ $VAR_QUEST_PART -eq 0 ]
+then
+	VAR_FOLDER_NAME+=" (single) "
+fi
+
+ls "$VAR_FRACTION_FOLDER" | grep -i -q "$1" | grep -i -q -o "(single)"
+
+if [ $? -eq 0 ]
+then
+	echo "Такой квест уже создан. Введите другое название."
+else
+if [ $VAR_QUEST_PART -n 0 &&  ]
+then
+	echo "$VAR_FRACTION_FOLDER"
+	cd "$VAR_FRACTION_FOLDER"
+	pwd
+	mkdir "$1"
+	cd "$1"
+	cd ../../
+else
+	echo "В этом квесте только одна часть.";
+fi
+fi
+
+
